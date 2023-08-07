@@ -4,15 +4,13 @@
 from faster_whisper import WhisperModel
 import torch
 
+
 def download_model():
     device = 0 if torch.cuda.is_available() else -1
     model_size = "large-v2"
     compute_type = "int8_float16"
-    model = WhisperModel(
-        model_size=model_size,
-        device=device,
-        compute_type=compute_type
-    )
+    model = WhisperModel(model_size, device, compute_type)
+
 
 if __name__ == "__main__":
     download_model()
