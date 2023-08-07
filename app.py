@@ -14,7 +14,7 @@ app = Potassium("echilly-io_serverless-whisper-large")
 def init():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model_size = "large-v2"
-    compute_type = "int8_float16"
+    compute_type = "float16"
     model = WhisperModel(model_size, device, compute_type)
     context = {
         "model": model,
