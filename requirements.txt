@@ -1,0 +1,7 @@
+sanic==22.6.2
+torch==1.13.1
+transformers
+accelerate
+faster-whisper @ git+https://github.com/guillaumekln/faster-whisper
+ctranslate2
+potassium
