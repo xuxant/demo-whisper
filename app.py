@@ -15,7 +15,7 @@ def init():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model_size = "large-v2"
     compute_type = "float16"
-    model = WhisperModel(model_size, device, compute_type)
+    model = WhisperModel(model_size, device=device, compute_type=compute_type)
     context = {
         "model": model,
     }
