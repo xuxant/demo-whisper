@@ -6,7 +6,7 @@ import torch
 
 
 def download_model():
-    device = 0 if torch.cuda.is_available() else -1
+    device = "cuda" if torch.cuda.is_available() else "cpu"
     model_size = "large-v2"
     compute_type = "int8_float16"
     model = WhisperModel(model_size, device, compute_type)
