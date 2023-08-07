@@ -2,6 +2,7 @@
 # It runs during container build time to get model weights built into the container
 
 from faster_whisper import WhisperModel
+import torch
 
 def download_model():
     device = 0 if torch.cuda.is_available() else -1
