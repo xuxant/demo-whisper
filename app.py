@@ -27,7 +27,13 @@ def init():
 def inference(context: dict, request: Request) -> Response:
     model = context.get("model")
     prompt = request.json.get("prompt")
-
+    file_format = "mp3"
+    kwargs = {}
+    try:
+        file_format = prompt.get("format")
+        kwargs = prompt.get("model_inputs")
+    except:
+        pass
     mp3BytesString = prompt.get("mp3BytesString")
     if mp3BytesString == None:
         return Response(
@@ -37,11 +43,33 @@ def inference(context: dict, request: Request) -> Response:
             status=500,
         )
     mp3Bytes = BytesIO(base64.b64decode(mp3BytesString.encode("ISO-8859-1")))
-    with open("input.mp3", "wb") as file:
+    tmp_file = 'input.'+format
+    with open(tmp_file, "wb") as file:
         file.write(mp3Bytes.getbuffer())
 
-    result = model.transcribe("input.mp3")
+    segments, info = model.transcribe("input.mp3", **kwargs)
+    text = ""
+    real_segments = []
+    for segment in segments:
+        text += segment.text + " "
+        current_segment = {
+            "text": segment.text,
+            "start": segment.start,
+            "end": segment.end,
+        }
+        if kwargs.get("word_timestamps", False) and segment.words:
+            current_segment["word_timestamps"] = segment.words
 
+        real_segments.append(current_segment)
+    
+    result = {
+        "text": text,
+        "segments": segments,
+        "language": info.language,
+        "language_probability": info.language_probability,
+        "duration": info.duration,
+    }
+    
     return Response(json=result, status=200)
 
 
