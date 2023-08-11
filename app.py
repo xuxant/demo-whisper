@@ -27,13 +27,12 @@ def init():
 def inference(context: dict, request: Request) -> Response:
     model = context.get("model")
     prompt = request.json.get("prompt")
-    file_format = "mp3"
-    kwargs = {}
-    try:
-        file_format = prompt.get("format")
-        kwargs = prompt.get("model_inputs")
-    except:
-        pass
+    file_format = prompt.get("file_format")
+    if file_format == None:
+        file_format = "mp3"
+    kwargs = prompt.get("kwargs")
+    if kwargs == None:
+        kwargs = {}
     mp3BytesString = prompt.get("mp3BytesString")
     if mp3BytesString == None:
         return Response(
@@ -43,7 +42,7 @@ def inference(context: dict, request: Request) -> Response:
             status=500,
         )
     mp3Bytes = BytesIO(base64.b64decode(mp3BytesString.encode("ISO-8859-1")))
-    tmp_file = 'input.'+format
+    tmp_file = 'input.'+file_format
     with open(tmp_file, "wb") as file:
         file.write(mp3Bytes.getbuffer())
 
@@ -64,12 +63,12 @@ def inference(context: dict, request: Request) -> Response:
     
     result = {
         "text": text,
-        "segments": segments,
+        "segments": real_segments,
         "language": info.language,
         "language_probability": info.language_probability,
         "duration": info.duration,
     }
-    
+
     return Response(json=result, status=200)
 
 
