@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install libcudnn8 && apt-get install libcudnn8-dev
 RUN pip3 install --upgrade pip
 ADD requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
-
+RUN pip uninstall nvidia_cublas_cu11 -y
 # Add your model weight files 
 # (in this case we have a python script)
 ADD download.py .
