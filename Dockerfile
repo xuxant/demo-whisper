@@ -18,9 +18,8 @@ RUN pip3 install -r requirements.txt
 ADD download.py .
 RUN python3 download.py
 
-
 ADD app.py .
 
 EXPOSE 8000
 
-CMD python3 -u app.py
+CMD python3 app.py
